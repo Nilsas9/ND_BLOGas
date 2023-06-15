@@ -31,64 +31,64 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 )
 public class SecurityConfig {
 
-//    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
-//
-//    private final JwtAuthenticationFilter authenticationFilter;
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
-//    public SecurityConfig(UserDetailsService userDetailsService,
-//                          JwtAuthenticationEntryPoint authenticationEntryPoint,
-//                          JwtAuthenticationFilter authenticationFilter){
-//        this.authenticationEntryPoint = authenticationEntryPoint;
-//        this.authenticationFilter = authenticationFilter;
-//    }
+    private final JwtAuthenticationFilter authenticationFilter;
 
-//    @Bean
-//    public static PasswordEncoder passwordEncoder(){
-//        return new BCryptPasswordEncoder();
-//    }
+    public SecurityConfig(UserDetailsService userDetailsService,
+                          JwtAuthenticationEntryPoint authenticationEntryPoint,
+                          JwtAuthenticationFilter authenticationFilter){
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.authenticationFilter = authenticationFilter;
+    }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-//        return configuration.getAuthenticationManager();
-//    }
+    @Bean
+    public static PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
-//    @Bean
-//    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//
-//        http.csrf().disable()
-//                .authorizeHttpRequests((authorize) ->
-////                        authorize.anyRequest().authenticated()
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        http.csrf().disable()
+                .authorizeHttpRequests((authorize) ->
+                        authorize.anyRequest().authenticated()
 //                        authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-//                                //.requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
-//                                .requestMatchers("/api/auth/**").permitAll()
-//                                .requestMatchers("/swagger-ui/**").permitAll()
-//                                .requestMatchers("/v3/api-docs/**").permitAll()
-//                                .anyRequest().authenticated()
-//
-//                ).exceptionHandling( exception -> exception
-//                        .authenticationEntryPoint(authenticationEntryPoint)
-//                ).sessionManagement( session -> session
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                );
-//
-//        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//        return http.build();
-//    }
+                                //.requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
+                                .anyRequest().authenticated()
 
-//    @Bean
-//    public UserDetailsService userDetailsService(){
-//        UserDetails ramesh = User.builder()
-//                .username("vik")
-//                .password(passwordEncoder().encode("vik"))
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder().encode("admin"))
-//                .roles("ADMIN")
-//                .build();
-//        return new InMemoryUserDetailsManager(ramesh, admin);
-//    }
+                ).exceptionHandling( exception -> exception
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                ).sessionManagement( session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                );
+
+        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(){
+        UserDetails ramesh = User.builder()
+                .username("vik")
+                .password(passwordEncoder().encode("vik"))
+                .roles("USER")
+                .build();
+
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(passwordEncoder().encode("admin"))
+                .roles("ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(ramesh, admin);
+    }
 }
